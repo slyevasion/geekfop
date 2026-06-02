@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/sync",
+      "schedule": "0 6 * * *"
+    }
+  ],
+  "functions": {
+    "src/feed_app/api.py": {
+      "excludeFiles": "{tests/**,.pytest_cache/**,.ruff_cache/**,data/**,**/__pycache__/**,**/*.pyc}"
+    }
+  }
+}
