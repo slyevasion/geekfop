@@ -78,7 +78,8 @@ The UI supports:
 
 ### Hosted Feed API
 
-The hosted path uses FastAPI and keeps the same UI/API routes as the local server.
+The hosted path uses FastAPI and keeps the same UI/API routes as the local server. Vercel
+loads the root `app.py` shim, which imports the app from `src/feed_app/api.py`.
 
 ```bash
 PYTHONPATH=src uv run uvicorn feed_app.api:app --reload
@@ -94,7 +95,9 @@ SYNC_TIMEOUT_SECONDS=12
 SYNC_LIMIT_PER_SOURCE=20
 ```
 
-`DATABASE_URL` switches the hosted API from local SQLite to SQLAlchemy/Postgres. On startup,
+`DATABASE_URL` switches the hosted API from local SQLite to SQLAlchemy/Postgres. If your
+Vercel/Neon integration provides `POSTGRES_URL`, `POSTGRES_PRISMA_URL`,
+`POSTGRES_URL_NON_POOLING`, or `postgres` instead, the app accepts those too. On startup,
 the app creates the same tables and seeds sources from `config/feed_sources.json`.
 
 `vercel.json` defines one daily cron run at `/api/cron/sync`. Vercel calls it with the

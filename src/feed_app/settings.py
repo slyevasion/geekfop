@@ -29,7 +29,13 @@ class AppSettings:
 @lru_cache
 def get_settings() -> AppSettings:
     return AppSettings(
-        database_url=_optional_env("DATABASE_URL"),
+        database_url=_first_env(
+            "DATABASE_URL",
+            "POSTGRES_URL",
+            "POSTGRES_PRISMA_URL",
+            "POSTGRES_URL_NON_POOLING",
+            "postgres",
+        ),
         sqlite_db_path=Path(os.environ.get("FEED_APP_DB_PATH", str(DEFAULT_DB_PATH))),
         run_dir=Path(os.environ.get("FEED_APP_RUN_DIR", str(DEFAULT_RUN_DIR))),
         user_id=os.environ.get("FEED_APP_USER_ID", DEFAULT_USER_ID),
@@ -45,6 +51,14 @@ def get_settings() -> AppSettings:
 def _optional_env(name: str) -> str | None:
     value = os.environ.get(name, "").strip()
     return value or None
+
+
+def _first_env(*names: str) -> str | None:
+    for name in names:
+        value = _optional_env(name)
+        if value:
+            return value
+    return None
 
 
 def _int_env(name: str, default: int) -> int:

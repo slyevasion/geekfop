@@ -25,7 +25,7 @@ scrape-reddit = "reddit_scraper.cli:main"
 packages = ["src/feed_app", "src/reddit_scraper"]
 
 [tool.vercel]
-entrypoint = "feed_app.api:app"
+entrypoint = "app:app"
 
 [tool.ruff]
 line-length = 100
